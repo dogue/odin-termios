@@ -1,5 +1,7 @@
 package termios
 
+NCCS :: 32
+
 // input flags
 // comments are from the original C header
 IF_IGNBRK   :: 1         // ignore break condition

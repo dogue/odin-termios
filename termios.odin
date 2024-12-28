@@ -18,8 +18,6 @@ foreign lib {
     // if you need them, feel free to open a PR
 }
 
-NCCS :: 32
-
 Termios :: struct {
     c_iflag: c.uint,
     c_oflag: c.uint,
@@ -29,32 +27,4 @@ Termios :: struct {
     c_cc:    [NCCS]c.uchar,
     speedi:  c.uint,
     speedo:  c.uint,
-}
-
-// sets the correct flags for raw mode and returns the original terminal attributes
-enable_raw_mode :: proc() -> (term_attrs: Termios, errno: i32) {
-    term: Termios
-    if res := tcgetattr(0, &term); res != 0 {
-        errno = libc.errno()^
-        return
-    }
-
-    term_attrs = term
-    cfmakeraw(&term)
-
-    if res := tcsetattr(0, TCSANOW, &term); res != 0 {
-        errno = libc.errno()^
-        return
-    }
-
-    return
-}
-
-// sets terminal attributes (usually those returned from `enable_raw_mode`)
-disable_raw_mode :: proc(term_attrs: ^Termios) -> (errno: i32) {
-    if res := tcsetattr(0, TCSANOW, term_attrs); res != 0 {
-        return libc.errno()^
-    }
-
-    return 0
 }
