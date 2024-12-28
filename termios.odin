@@ -3,6 +3,8 @@ package termios
 import "core:c"
 import "core:c/libc"
 
+ #assert(ODIN_OS == .Linux, "odin-termios currently only supports Linux")
+
 foreign import lib "system:c"
 @(default_calling_convention = "c")
 foreign lib {
